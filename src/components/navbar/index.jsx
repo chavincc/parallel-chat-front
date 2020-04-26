@@ -1,5 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+
+import { AuthContext } from '../../services/store/authStore';
+import { Menu, Button } from 'antd';
 
 export default function Navbar() {
-  return <div>---navbar---</div>;
+  const { isAuth, username, logOut } = useContext(AuthContext);
+
+  return (
+    <Menu mode="horizontal">
+      <Menu.Item key="boards">
+        <Link to="/boards">boards</Link>
+      </Menu.Item>
+      {!isAuth && (
+        <Menu.Item key="login">
+          <Link to="/login">log in</Link>
+        </Menu.Item>
+      )}
+      {!isAuth && (
+        <Menu.Item key="register">
+          <Link to="/register">register</Link>
+        </Menu.Item>
+      )}
+      {isAuth && (
+        <Menu.Item>
+          <Button onClick={logOut}>log out</Button>
+        </Menu.Item>
+      )}
+      {isAuth && <span>user:{username}</span>}
+    </Menu>
+  );
 }
