@@ -3,6 +3,7 @@ import React, { createContext, useReducer } from 'react';
 export const AuthContext = createContext({});
 
 const initialState = {
+  adminToken: '3527ba8f45e1f30483bc62b9c39bdd9b17273aaf',
   username: '',
   isAuth: false,
 };
@@ -20,19 +21,23 @@ const authReducer = (state, action) => {
         isAuth: true,
         username: action.payload,
       };
+    default:
+      return state;
   }
 };
 
 export const AuthProvider = ({ children }) => {
   const [authState, authDispatch] = useReducer(authReducer, initialState);
 
-  const { isAuth, username } = authState;
+  const { isAuth, username, adminToken } = authState;
 
   const logOut = (payload) => authDispatch({ type: 'LOG_OUT', payload });
   const logIn = (payload) => authDispatch({ type: 'LOG_IN', payload });
 
   return (
-    <AuthContext.Provider value={{ isAuth, username, logOut, logIn }}>
+    <AuthContext.Provider
+      value={{ isAuth, username, adminToken, logOut, logIn }}
+    >
       {children}
     </AuthContext.Provider>
   );

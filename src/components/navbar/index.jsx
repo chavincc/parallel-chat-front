@@ -8,7 +8,7 @@ export default function Navbar() {
   const { isAuth, username, logOut } = useContext(AuthContext);
 
   return (
-    <Menu mode="horizontal">
+    <Menu mode="horizontal" style={{ marginBottom: '3rem' }}>
       <Menu.Item key="boards">
         <Link to="/boards">boards</Link>
       </Menu.Item>
