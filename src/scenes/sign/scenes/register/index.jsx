@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Row, Col, Button, Form, Input, Card } from 'antd';
 
-import { AuthContext } from '../../../../services/store/authStore';
 import {
   requiredFieldRule,
   usernameRule,
@@ -9,12 +8,14 @@ import {
   passwordRule,
   emailRule,
 } from '../../services/rules';
+import { register } from '../../services/api';
 
 export default function Register() {
-  const { adminToken } = useContext(AuthContext);
-
-  const handleRegister = (value) => {
-    console.log(value);
+  const handleRegister = async (formData) => {
+    console.log('click');
+    console.log(formData);
+    const response = await register(formData);
+    console.log(response);
   };
 
   return (
