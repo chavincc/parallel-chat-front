@@ -9,13 +9,13 @@ import {
   passwordRule,
   emailRule,
 } from '../../services/rules';
-import { register } from '../../services/api';
+import { registerAPI } from '../../services/api';
 
 export default function Register() {
   const history = useHistory();
 
   const handleRegister = async (formData) => {
-    const response = await register(formData);
+    const response = await registerAPI(formData);
     if (response.error) {
       alert(response.error.message);
     } else {

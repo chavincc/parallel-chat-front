@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 
-export const register = async (formData) => {
+export const registerAPI = async (formData) => {
   try {
     const response = await axios.post(
       'http://127.0.0.1:8000/api/users/',

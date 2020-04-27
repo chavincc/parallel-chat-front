@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Row, Col, Button, Form, Input, Card } from 'antd';
+
+import { AuthContext } from '../../../../services/store/authStore';
+import { loginAPI } from '../../services/api';
 
 export default function Login() {
   const router = useHistory();
   const { username } = useParams();
+  const { logIn } = useContext(AuthContext);
 
-  const handleLogin = (value) => {
-    console.log(value);
+  const handleLogin = async (formData) => {
+    const token = await loginAPI(formData);
+    if (!token.error) {
+      document.cookie = `token=${token}`;
+      logIn({
+        username: formData.username,
+      });
+      router.push('/');
+    } else {
+      alert('username or password is wrong');
+    }
   };
 
   return (
