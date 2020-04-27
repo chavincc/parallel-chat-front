@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <Menu mode="horizontal" style={{ marginBottom: '3rem' }}>
       <Menu.Item key="boards">
-        <Link to="/boards">boards</Link>
+        <Link to="/">boards</Link>
       </Menu.Item>
       {!isAuth && (
         <Menu.Item key="login">

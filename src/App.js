@@ -23,7 +23,7 @@ function App() {
           <Route exact path="/register">
             <Register />
           </Route>
-          <Route exact path="/boards">
+          <Route exact path="/">
             <Boards />
           </Route>
         </Switch>
