@@ -1,7 +1,11 @@
 import React from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { Row, Col, Button, Form, Input, Card } from 'antd';
 
-export default function Register() {
+export default function Login() {
+  const router = useHistory();
+  const { username } = useParams();
+
   const handleLogin = (value) => {
     console.log(value);
   };
@@ -31,7 +35,7 @@ export default function Register() {
           >
             LOG IN
           </div>
-          <Form onFinish={handleLogin}>
+          <Form onFinish={handleLogin} initialValues={{ username }}>
             <Form.Item label="username" name="username">
               <Input />
             </Form.Item>

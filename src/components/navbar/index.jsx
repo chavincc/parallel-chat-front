@@ -1,11 +1,17 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { AuthContext } from '../../services/store/authStore';
 import { Menu, Button } from 'antd';
 
 export default function Navbar() {
+  const router = useHistory();
   const { isAuth, username, logOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut();
+    router.push('/login');
+  };
 
   return (
     <Menu mode="horizontal" style={{ marginBottom: '3rem' }}>
@@ -24,7 +30,7 @@ export default function Navbar() {
       )}
       {isAuth && (
         <Menu.Item>
-          <Button onClick={logOut}>log out</Button>
+          <Button onClick={handleLogout}>log out</Button>
         </Menu.Item>
       )}
       {isAuth && <span>user:{username}</span>}

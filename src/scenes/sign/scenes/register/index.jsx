@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Row, Col, Button, Form, Input, Card } from 'antd';
 
 import {
@@ -11,11 +12,15 @@ import {
 import { register } from '../../services/api';
 
 export default function Register() {
+  const history = useHistory();
+
   const handleRegister = async (formData) => {
-    console.log('click');
-    console.log(formData);
     const response = await register(formData);
-    console.log(response);
+    if (response.error) {
+      alert(response.error.message);
+    } else {
+      history.push(`/login/${formData.username}`);
+    }
   };
 
   return (

@@ -14,7 +14,10 @@ function App() {
       <Router>
         <Navbar />
         <Switch>
-          <Route exact path="/login">
+          <Route path="/login/:username">
+            <Login />
+          </Route>
+          <Route path="/login">
             <Login />
           </Route>
           <Route exact path="/register">
