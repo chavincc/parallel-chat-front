@@ -3,7 +3,7 @@ import { Card, Form, Input, Button } from 'antd';
 
 import Message from '../message';
 
-import './styled-scrollbar.css';
+import '../styled-scrollbar.css';
 
 export default function ChatBoard() {
   return (
