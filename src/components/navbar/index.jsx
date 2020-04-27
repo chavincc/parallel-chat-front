@@ -10,6 +10,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logOut();
+    document.cookie = 'token=';
     router.push('/login');
   };
 
@@ -28,12 +29,8 @@ export default function Navbar() {
           <Link to="/register">register</Link>
         </Menu.Item>
       )}
-      {isAuth && (
-        <Menu.Item>
-          <Button onClick={handleLogout}>log out</Button>
-        </Menu.Item>
-      )}
-      {isAuth && <span>user:{username}</span>}
+      {isAuth && <Button onClick={handleLogout}>log out</Button>}
+      {isAuth && <span style={{ marginLeft: '1rem' }}>user:{username}</span>}
     </Menu>
   );
 }
