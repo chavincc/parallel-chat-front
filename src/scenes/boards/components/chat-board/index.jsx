@@ -1,11 +1,38 @@
-import React from 'react';
-import { Card, Form, Input, Button } from 'antd';
+import React, { useState, useEffect, useContext } from 'react';
+import { Card, Form, Input, Button, Divider } from 'antd';
+import { useParams, useHistory } from 'react-router-dom';
 
+import { AuthContext } from '../../../../services/store/authStore';
+import { getMessagesAPI } from '../../services/api';
 import Message from '../message';
 
 import '../styled-scrollbar.css';
 
 export default function ChatBoard() {
+  const { boardName } = useParams();
+  const router = useHistory();
+  const [messages, setMessages] = useState(null);
+  const { username } = useContext(AuthContext);
+
+  useEffect(() => {
+    (async () => {
+      if (boardName) {
+        const response = await getMessagesAPI(boardName);
+        if (!response.error) {
+          setMessages(response);
+        } else {
+          switch (response.status) {
+            case 401:
+              router.push('/login');
+              break;
+            default:
+              alert('something is wrong');
+          }
+        }
+      }
+    })();
+  }, [router, boardName]);
+
   return (
     <div
       className="card-container"
@@ -30,17 +57,44 @@ export default function ChatBoard() {
           transform: 'translateY(-2px)',
         }}
       >
-        <Message text="test" mine />
-        <Message text="test" mine />
-        <Message
-          text="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rem facilis repudiandae facere vel, tempore ea"
-          mine
-        />
-        <Message text="test" />
-        <Message text="test" />
-        <Message text="test" mine />
-        <Message text="test" mine />
-        <Message text="testLorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum, odio!" />
+        {messages &&
+          messages.boards.messages.map((item) => {
+            if (item.id < messages.last_read) {
+              return (
+                <Message
+                  text={item.message}
+                  username={item.username}
+                  date={item.timestamp}
+                  mine={item.username === username}
+                  isRead={false}
+                />
+              );
+            } else if (item.id === messages.last_read) {
+              return (
+                <>
+                  <Message
+                    text={item.message}
+                    username={item.username}
+                    date={item.timestamp}
+                    mine={item.username === username}
+                    isRead={false}
+                  />
+                  <Divider />
+                </>
+              );
+            } else if (item.id >= messages.last_read) {
+              return (
+                <Message
+                  text={item.message}
+                  username={item.username}
+                  date={item.timestamp}
+                  mine={item.username === 'mattchampion'}
+                  isRead
+                />
+              );
+            }
+          })}
+        {messages && messages.last_read < 0 && <Divider />}
       </Card>
       <Card
         style={{

@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { AuthContext } from '../../services/store/authStore';
 import { Menu, Button } from 'antd';
+import { eraseCookie } from '../../services/utils/erase-cookie';
 
 export default function Navbar() {
   const router = useHistory();
@@ -10,14 +11,14 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logOut();
-    document.cookie = 'token=';
+    eraseCookie('token');
     router.push('/login');
   };
 
   return (
     <Menu mode="horizontal" style={{ marginBottom: '2rem' }}>
       <Menu.Item key="boards">
-        <Link to="/">boards</Link>
+        <Link to="/board">boards</Link>
       </Menu.Item>
       {!isAuth && (
         <Menu.Item key="login">
