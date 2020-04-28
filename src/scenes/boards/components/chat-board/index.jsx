@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Card, Form, Input, Button, Divider } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
 import { useParams, useHistory } from 'react-router-dom';
@@ -8,6 +8,24 @@ import { getMessagesAPI, postMessageAPI } from '../../services/api';
 import Message from '../message';
 
 import '../styled-scrollbar.css';
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 export default function ChatBoard() {
   const { boardName } = useParams();
@@ -24,6 +42,10 @@ export default function ChatBoard() {
     renderMessage();
   }, [router, boardName]);
 
+  useInterval(() => {
+    renderMessagePartialChange();
+  }, 4000);
+
   const renderMessage = async () => {
     if (boardName) {
       const response = await getMessagesAPI(boardName);
@@ -31,7 +53,9 @@ export default function ChatBoard() {
         if (!once) setOnce(true);
         setSavedUnread(response.last_read);
         setSavedLast(
-          response.boards.messages[response.boards.messages.length - 1].id
+          response.boards.messages.length
+            ? response.boards.messages[response.boards.messages.length - 1].id
+            : 0
         );
         setMessages(response);
       } else {
@@ -53,7 +77,9 @@ export default function ChatBoard() {
         setOnce(true);
         setSavedUnread(response.last_read);
         setSavedLast(
-          response.boards.messages[response.boards.messages.length - 1].id
+          response.boards.messages.length
+            ? response.boards.messages[response.boards.messages.length - 1].id
+            : 0
         );
       }
       setMessages(response);
@@ -87,7 +113,6 @@ export default function ChatBoard() {
         }}
       >
         {boardName || ''}
-        {savedLast}
       </Card>
       <Card
         style={{
