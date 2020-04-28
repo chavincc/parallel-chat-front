@@ -16,3 +16,20 @@ export const getMessagesAPI = async (boardName) => {
     return { error, status: error.response.status };
   }
 };
+
+export const postMessageAPI = async (boardName, formData) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/api/boards/${boardName}/post/`,
+      formData,
+      {
+        headers: {
+          Authorization: `Token ${getCookie('token')}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return { error, status: error.response.status };
+  }
+};

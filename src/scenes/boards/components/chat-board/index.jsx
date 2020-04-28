@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Card, Form, Input, Button, Divider } from 'antd';
+import { RightOutlined } from '@ant-design/icons';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { AuthContext } from '../../../../services/store/authStore';
-import { getMessagesAPI } from '../../services/api';
+import { getMessagesAPI, postMessageAPI } from '../../services/api';
 import Message from '../message';
 
 import '../styled-scrollbar.css';
@@ -12,26 +13,64 @@ export default function ChatBoard() {
   const { boardName } = useParams();
   const router = useHistory();
   const [messages, setMessages] = useState(null);
+  const [newMessage, setNewMessages] = useState('');
   const { username } = useContext(AuthContext);
 
+  const [savedUnread, setSavedUnread] = useState(-1);
+  const [savedLast, setSavedLast] = useState(-1);
+  const [once, setOnce] = useState(false);
+
   useEffect(() => {
-    (async () => {
-      if (boardName) {
-        const response = await getMessagesAPI(boardName);
-        if (!response.error) {
-          setMessages(response);
-        } else {
-          switch (response.status) {
-            case 401:
-              router.push('/login');
-              break;
-            default:
-              alert('something is wrong');
-          }
+    renderMessage();
+  }, [router, boardName]);
+
+  const renderMessage = async () => {
+    if (boardName) {
+      const response = await getMessagesAPI(boardName);
+      if (!response.error) {
+        if (!once) setOnce(true);
+        setSavedUnread(response.last_read);
+        setSavedLast(
+          response.boards.messages[response.boards.messages.length - 1].id
+        );
+        setMessages(response);
+      } else {
+        switch (response.status) {
+          case 401:
+            router.push('/login');
+            break;
+          default:
+            alert('something is wrong');
         }
       }
-    })();
-  }, [router, boardName]);
+    }
+  };
+
+  const renderMessagePartialChange = async () => {
+    const response = await getMessagesAPI(boardName);
+    if (!response.error) {
+      if (!once) {
+        setOnce(true);
+        setSavedUnread(response.last_read);
+        setSavedLast(
+          response.boards.messages[response.boards.messages.length - 1].id
+        );
+      }
+      setMessages(response);
+    }
+  };
+
+  const handleMessageSend = async () => {
+    if (newMessage.length > 0) {
+      const response = await postMessageAPI(boardName, { message: newMessage });
+      if (!response.error) {
+        await renderMessagePartialChange();
+        setNewMessages('');
+      } else {
+        alert(response.error);
+      }
+    }
+  };
 
   return (
     <div
@@ -47,7 +86,8 @@ export default function ChatBoard() {
           textAlign: 'center',
         }}
       >
-        Board Name
+        {boardName || ''}
+        {savedLast}
       </Card>
       <Card
         style={{
@@ -59,17 +99,17 @@ export default function ChatBoard() {
       >
         {messages &&
           messages.boards.messages.map((item) => {
-            if (item.id < messages.last_read) {
+            if (item.id < savedUnread) {
               return (
                 <Message
                   text={item.message}
                   username={item.username}
                   date={item.timestamp}
                   mine={item.username === username}
-                  isRead={false}
+                  isRead
                 />
               );
-            } else if (item.id === messages.last_read) {
+            } else if (item.id === savedUnread) {
               return (
                 <>
                   <Message
@@ -77,24 +117,46 @@ export default function ChatBoard() {
                     username={item.username}
                     date={item.timestamp}
                     mine={item.username === username}
-                    isRead={false}
+                    isRead
                   />
                   <Divider />
                 </>
               );
-            } else if (item.id >= messages.last_read) {
+            } else if (item.id >= savedUnread && item.id < savedLast) {
               return (
                 <Message
                   text={item.message}
                   username={item.username}
                   date={item.timestamp}
                   mine={item.username === 'mattchampion'}
-                  isRead
+                  isRead={false}
+                />
+              );
+            } else if (item.id === savedLast) {
+              return (
+                <>
+                  <Message
+                    text={item.message}
+                    username={item.username}
+                    date={item.timestamp}
+                    mine={item.username === 'mattchampion'}
+                    isRead={false}
+                  />
+                  {<Divider />}
+                </>
+              );
+            } else if (item.id > savedLast) {
+              return (
+                <Message
+                  text={item.message}
+                  username={item.username}
+                  date={item.timestamp}
+                  mine={item.username === 'mattchampion'}
+                  isRead={true}
                 />
               );
             }
           })}
-        {messages && messages.last_read < 0 && <Divider />}
       </Card>
       <Card
         style={{
@@ -105,12 +167,24 @@ export default function ChatBoard() {
           justifyContent: 'center',
         }}
       >
-        <Form layout="inline">
+        <Form layout="inline" onFinish={handleMessageSend}>
           <Form.Item>
-            <Input />
+            <Input
+              style={{ width: '250px' }}
+              autoComplete="off"
+              value={newMessage}
+              onChange={(e) => {
+                setNewMessages(e.target.value);
+              }}
+            />
           </Form.Item>
           <Form.Item>
-            <Button>send</Button>
+            <Button
+              disabled={!newMessage}
+              shape="circle"
+              icon={<RightOutlined />}
+              htmlType="submit"
+            />
           </Form.Item>
         </Form>
       </Card>
