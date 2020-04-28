@@ -17,8 +17,8 @@ export default function Navbar() {
 
   return (
     <Menu mode="horizontal" style={{ marginBottom: '2rem' }}>
-      <Menu.Item key="boards">
-        <Link to="/board">boards</Link>
+      <Menu.Item key="home">
+        <Link to="/">Home</Link>
       </Menu.Item>
       {!isAuth && (
         <Menu.Item key="login">
@@ -28,6 +28,11 @@ export default function Navbar() {
       {!isAuth && (
         <Menu.Item key="register">
           <Link to="/register">register</Link>
+        </Menu.Item>
+      )}
+      {isAuth && (
+        <Menu.Item key="boards">
+          <Link to="/board">boards</Link>
         </Menu.Item>
       )}
       {isAuth && <Button onClick={handleLogout}>log out</Button>}

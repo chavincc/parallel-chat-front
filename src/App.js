@@ -9,6 +9,7 @@ import { cookieAutoLoginAPI } from './services/api';
 import Boards from './scenes/boards';
 import Login from './scenes/sign/scenes/login';
 import Register from './scenes/sign/scenes/register';
+import Home from './scenes/home';
 
 function App() {
   const { isAuth, logIn } = useContext(AuthContext);
@@ -30,7 +31,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/">
-            HOME
+            <Home />
           </Route>
           <Route path="/login/:username">
             <Login />
