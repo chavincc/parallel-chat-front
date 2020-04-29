@@ -27,6 +27,7 @@ export default function Message({
       borderTopRightRadius: mine ? '0px' : '10px',
       border: `0.5px solid ${mine ? 'white' : 'rgb(187, 187, 187)'}`,
       background: mine ? '#dbffc2' : 'white',
+      overflowWrap: 'break-word',
     },
     date: {
       textAlign: mine ? 'right' : 'left',
