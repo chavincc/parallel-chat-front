@@ -57,6 +57,9 @@ export default function Home() {
             a mini project for 2020 parallel and distributed system class.{' '}
             <br />
             <br />
+            application handle failure of 1 server (out of 2)
+            <br />
+            <br />
             all design credit goes to{' '}
             <a href="http://www.linecorp.com">linecorp.com</a> and{' '}
             <a href="http://ant.design">ant design</a>.
