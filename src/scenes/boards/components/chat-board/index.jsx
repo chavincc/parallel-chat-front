@@ -96,10 +96,10 @@ export default function ChatBoard() {
 
   const handleMessageSend = async () => {
     if (newMessage.length > 0) {
+      setNewMessages('');
       const response = await postMessageAPI(boardName, { message: newMessage });
       if (!response.error) {
         await renderMessagePartialChange();
-        setNewMessages('');
       } else {
         alert(response.error);
       }
