@@ -14,3 +14,22 @@ export const getBoardsAPI = async () => {
     return { error, status: error.response.status };
   }
 };
+
+export const postBoardAPI = async (name) => {
+  try {
+    const response = await axios.post(
+      `${DOMAIN}/api/boards/`,
+      {
+        name,
+      },
+      {
+        headers: {
+          Authorization: `Token ${getCookie('token')}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return { error, status: error.response.status };
+  }
+};

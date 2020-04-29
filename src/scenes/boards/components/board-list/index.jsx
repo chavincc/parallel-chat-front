@@ -1,32 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { List, Tooltip, Button } from 'antd';
+import { List, Tooltip, Button, Form, Modal, Input } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom';
 
-import { getBoardsAPI } from '../../services/api';
+import { getBoardsAPI, postBoardAPI } from '../../services/api';
 
 import '../styled-scrollbar.css';
 
 export default function BoardList() {
   const router = useHistory();
-
+  const [formVisible, setFormVisible] = useState(false);
+  const [newBoardName, setNewBoardName] = useState('');
   const [boards, setBoards] = useState(null);
+
   useEffect(() => {
-    (async () => {
-      const response = await getBoardsAPI();
-      if (!response.error) {
-        setBoards(response);
-      } else {
-        switch (response.status) {
-          case 401:
-            router.push('/login');
-            break;
-          default:
-            alert('something is wrong');
-        }
-      }
-    })();
+    renderBoard();
   }, [router]);
+
+  const renderBoard = async () => {
+    const response = await getBoardsAPI();
+    if (!response.error) {
+      setBoards(response);
+    } else {
+      switch (response.status) {
+        case 401:
+          router.push('/login');
+          break;
+        default:
+          alert('something is wrong');
+      }
+    }
+  };
+
+  const handleAddBoard = async () => {
+    setNewBoardName('');
+    const response = await postBoardAPI(newBoardName);
+    if (!response.error) {
+      renderBoard();
+    } else {
+      alert('something is wrong');
+    }
+    setFormVisible(false);
+  };
 
   return (
     boards && (
@@ -46,6 +61,9 @@ export default function BoardList() {
                 icon={<PlusCircleOutlined />}
                 style={{
                   width: '200px',
+                }}
+                onClick={() => {
+                  setFormVisible(true);
                 }}
               />
             </Tooltip>
@@ -68,7 +86,26 @@ export default function BoardList() {
             </Link>
           </List.Item>
         )}
-      ></List>
+      >
+        <Modal
+          visible={formVisible}
+          footer={null}
+          onCancel={() => {
+            setFormVisible(false);
+          }}
+        >
+          <Form layout="vertical">
+            <Form.Item label="name">
+              <Input onChange={(e) => setNewBoardName(e.target.value)} />
+            </Form.Item>
+            <Form.Item>
+              <Button disabled={!newBoardName} onClick={handleAddBoard}>
+                submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </List>
     )
   );
 }
