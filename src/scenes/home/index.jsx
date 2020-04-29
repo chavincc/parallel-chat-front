@@ -39,7 +39,6 @@ const style = {
 };
 
 export default function Home() {
-  console.log(process.env);
   return (
     <Row>
       <Col offset="5" span="14">
