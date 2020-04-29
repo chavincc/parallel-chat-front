@@ -16,7 +16,7 @@ export default function Navbar() {
   };
 
   return (
-    <Menu mode="horizontal" style={{ marginBottom: '2rem' }}>
+    <Menu selectedKeys={[]} mode="horizontal" style={{ marginBottom: '2rem' }}>
       <Menu.Item key="home">
         <Link to="/">Home</Link>
       </Menu.Item>
