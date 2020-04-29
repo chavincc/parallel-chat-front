@@ -61,7 +61,7 @@ export default function Register() {
               name="password"
               rules={[requiredFieldRule, passwordRule]}
             >
-              <Input />
+              <Input.Password />
             </Form.Item>
             <Form.Item
               label="email"

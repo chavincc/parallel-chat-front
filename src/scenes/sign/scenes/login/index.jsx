@@ -53,7 +53,7 @@ export default function Login() {
               <Input />
             </Form.Item>
             <Form.Item label="password" name="password">
-              <Input />
+              <Input.Password />
             </Form.Item>
             <Form.Item>
               <Button htmlType="submit">login</Button>
