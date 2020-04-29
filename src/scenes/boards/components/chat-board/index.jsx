@@ -44,7 +44,15 @@ export default function ChatBoard() {
 
   useInterval(() => {
     renderMessagePartialChange();
-  }, 4000);
+  }, 5000);
+
+  const sortByDate = (messages) => {
+    return messages.sort(function (t, o) {
+      const tDate = new Date(t.timestamp).getTime();
+      const oDate = new Date(o.timestamp).getTime();
+      return tDate - oDate;
+    });
+  };
 
   const renderMessage = async () => {
     if (boardName) {
@@ -123,7 +131,7 @@ export default function ChatBoard() {
         }}
       >
         {messages &&
-          messages.boards.messages.map((item) => {
+          sortByDate(messages.boards.messages).map((item) => {
             if (item.id < savedUnread) {
               return (
                 <Message
