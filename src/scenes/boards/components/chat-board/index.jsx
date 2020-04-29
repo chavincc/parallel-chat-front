@@ -153,7 +153,7 @@ export default function ChatBoard() {
                   text={item.message}
                   username={item.username}
                   date={item.timestamp}
-                  mine={item.username === 'mattchampion'}
+                  mine={item.username === username}
                   isRead={false}
                 />
               );
@@ -164,7 +164,7 @@ export default function ChatBoard() {
                     text={item.message}
                     username={item.username}
                     date={item.timestamp}
-                    mine={item.username === 'mattchampion'}
+                    mine={item.username === username}
                     isRead={false}
                   />
                   {<Divider />}
@@ -176,7 +176,7 @@ export default function ChatBoard() {
                   text={item.message}
                   username={item.username}
                   date={item.timestamp}
-                  mine={item.username === 'mattchampion'}
+                  mine={item.username === username}
                   isRead={true}
                 />
               );
