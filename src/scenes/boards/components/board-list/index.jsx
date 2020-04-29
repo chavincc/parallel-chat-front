@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { List, Tooltip, Button, Form, Modal, Input } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom';
@@ -6,6 +6,24 @@ import { Link, useHistory } from 'react-router-dom';
 import { getBoardsAPI, postBoardAPI } from '../../services/api';
 
 import '../styled-scrollbar.css';
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 export default function BoardList() {
   const router = useHistory();
@@ -16,6 +34,10 @@ export default function BoardList() {
   useEffect(() => {
     renderBoard();
   }, [router]);
+
+  useInterval(() => {
+    renderBoard();
+  }, 8000);
 
   const renderBoard = async () => {
     const response = await getBoardsAPI();
