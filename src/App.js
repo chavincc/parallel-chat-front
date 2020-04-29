@@ -10,8 +10,10 @@ import Boards from './scenes/boards';
 import Login from './scenes/sign/scenes/login';
 import Register from './scenes/sign/scenes/register';
 import Home from './scenes/home';
+import { ADMIN_KEY } from './config';
 
 function App() {
+  console.log(ADMIN_KEY);
   const { isAuth, logIn } = useContext(AuthContext);
 
   useEffect(() => {

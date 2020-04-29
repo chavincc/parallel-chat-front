@@ -39,6 +39,7 @@ const style = {
 };
 
 export default function Home() {
+  console.log(process.env);
   return (
     <Row>
       <Col offset="5" span="14">
@@ -46,7 +47,7 @@ export default function Home() {
           <div className="head-wrap" style={style.headWrap}>
             <>
               <div className="head" style={style.head}>
-                NoSocketChat.
+                NoSocketChat. {process.env.REACT_APP_BASE_URL}
               </div>
               <div className="headsub" style={style.headsub}>
                 render by polling
@@ -57,7 +58,7 @@ export default function Home() {
             a mini project for 2020 parallel and distributed system class.{' '}
             <br />
             <br />
-            all design credits go to{' '}
+            all design credit goes to{' '}
             <a href="http://www.linecorp.com">linecorp.com</a> and{' '}
             <a href="http://ant.design">ant design</a>.
           </div>

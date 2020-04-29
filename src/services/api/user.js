@@ -1,9 +1,10 @@
 import { getCookie } from '../utils/get-cookie';
+import { DOMAIN } from '../../config/index';
 const axios = require('axios').default;
 
 export const cookieAutoLoginAPI = async () => {
   try {
-    const response = await axios.get('http://127.0.0.1:8000/api/users/', {
+    const response = await axios.get(`${DOMAIN}/api/users/`, {
       headers: {
         Authorization: `Token ${getCookie('token')}`,
       },
