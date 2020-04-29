@@ -1,3 +1,3 @@
 export const ADMIN_KEY =
-  process.env.ADMIN_KEY || '3fa767b3c5070a5f31fc9974530bcabca088b829';
+  process.env.ADMIN_KEY || 'c326537d2e6d89290820c79d3ceda4365d8cd5a4';
 export const DOMAIN = process.env.DOMAIN || 'http://localhost:8000';
